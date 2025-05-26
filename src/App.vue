@@ -6,6 +6,7 @@
   import Header from "./components/Header.vue"
   import Taskboard from "./components/Taskboard.vue"
 
+  const allBoards = ref(data)
   const currentBoard = ref(data[0])
   const isSidebar = ref(true)
   const isDarkMode = ref(false)
@@ -27,6 +28,10 @@
     isSidebar.value = value
   }
 
+  // function addNewBoard(newBoard) {
+  //   allBoards.value.push(newBoard)
+  // }
+
 </script>
 
 <template>
@@ -35,7 +40,7 @@
     <div class="grow flex">
 
       <Sidebar 
-        :data="data"
+        :allBoards="allBoards"
         :currentBoard="currentBoard"
         :isSidebar="isSidebar"
         :isDarkMode="isDarkMode"
@@ -43,6 +48,7 @@
         @updateSidebar="handleSidebarUpdate"
         @updateDarkMode="toggleDarkMode"
       />
+        <!-- @forwardAddNewBoard="addNewBoard" -->
 
       <div class="grow flex flex-col">
         

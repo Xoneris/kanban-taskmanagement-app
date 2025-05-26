@@ -6,7 +6,7 @@
 </script>
 
 <template>
-    <div v-if="currentBoard.columns" class="bg-light-grey dark:bg-very-dark-grey grow flex gap-6 p-6 justify-start items-start transition-all">
+    <div v-if="currentBoard.columns.length > 0" class="bg-light-grey dark:bg-very-dark-grey grow flex gap-6 p-6 justify-start items-start transition-all">
 
         <Column v-for="column in currentBoard.columns" 
             :column="column"
@@ -17,8 +17,8 @@
         </div>
     </div>
 
-    <div v-else class="bg-[#F4F7FD] grow flex gap-6 p-6 justify-center items-center">
-        <span>This board is empty. Create a new colum to get started.</span>
+    <div v-else class="bg-light-grey dark:bg-very-dark-grey grow flex flex-col gap-8 p-6 justify-center items-center">
+        <h1 class="heading-l text-medium-grey">This board is empty. Create a new colum to get started.</h1>
         <Button>
             + Add New Column
         </Button>

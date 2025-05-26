@@ -3,9 +3,10 @@
     import { ref, watch } from "vue"
     import Navigation from "./Navigation.vue"
 
-    const {data, currentBoard, isSidebar, isDarkMode} = defineProps(["data","currentBoard","isSidebar","isDarkMode"])
+    // const {allBoards, currentBoard, isSidebar, isDarkMode} = defineProps(["allBoards","currentBoard","isSidebar","isDarkMode"])
+    const props = defineProps(["allBoards","currentBoard","isSidebar","isDarkMode"])
 
-    const emit = defineEmits(['updateBoard','updateSidebar','updateDarkMode'])
+    const emit = defineEmits(['updateBoard','updateSidebar','updateDarkMode',"forwardAddNewBoard"])
 
     function forwardUpdate(value) {
         emit('updateBoard', value)
@@ -17,6 +18,10 @@
 
     function updateDarkMode() {
         emit('updateDarkMode')
+    }
+
+    function forwardAddNewBoard(newBoard) {
+        emit('forwardAddNewBoard', newBoard)
     }
 
 </script>
@@ -33,9 +38,10 @@
         </div>
 
         <Navigation
-            :data="data"
+            :allBoards="props.allBoards"
             :currentBoard="currentBoard"
             @updateBoard="forwardUpdate"
+            @addNewBoard="forwardAddNewBoard"
         />
 
         <div class="mx-[25px] bg-light-grey dark:bg-very-dark-grey rounded-[6px] h-12 flex justify-center items-center transition-all">
