@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import data from "./data/data.json"
-  import { ref, watch } from 'vue'
+  import { ref } from 'vue'
 
   import Sidebar from "./components/Sidebar.vue"
   import Header from "./components/Header.vue"
@@ -8,24 +8,11 @@
 
   const allBoards = ref(data)
   const currentBoard = ref(data[0])
-  const isSidebar = ref(true)
-  const isDarkMode = ref(false)
 
-    function toggleDarkMode() {
-        isDarkMode.value = !isDarkMode.value
-    }
 
-    watch(isDarkMode, (enabled) => {
-        const html = document.documentElement
-        html.classList.toggle('dark', enabled)
-    })
 
   function handleUpdate(value:number) {
     currentBoard.value = data[value]
-  }
-
-  function handleSidebarUpdate(value:boolean) {
-    isSidebar.value = value
   }
 
   // function addNewBoard(newBoard) {
@@ -39,28 +26,13 @@
 
     <div class="grow flex">
 
-      <Sidebar 
-        :allBoards="allBoards"
-        :currentBoard="currentBoard"
-        :isSidebar="isSidebar"
-        :isDarkMode="isDarkMode"
-        @updateBoard="handleUpdate"
-        @updateSidebar="handleSidebarUpdate"
-        @updateDarkMode="toggleDarkMode"
-      />
-        <!-- @forwardAddNewBoard="addNewBoard" -->
+      <Sidebar/>
 
       <div class="grow flex flex-col">
         
-        <Header 
-          :currentBoard="currentBoard" 
-          :isSidebar="isSidebar"
-          :isDarkMode="isDarkMode"
-        />
+        <Header/>
           
-        <Taskboard 
-          :currentBoard="currentBoard"
-        />
+        <Taskboard/>
 
       </div>
     </div>

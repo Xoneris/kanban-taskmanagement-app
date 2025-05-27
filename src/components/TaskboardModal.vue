@@ -1,20 +1,26 @@
-<script setup>
-    import { ref } from "vue"
-    import Modal from "./Modal.vue"
-    import Button from "./Button.vue"
+<script setup lang="ts">
+    import { ref } from "vue" 
+    import type { Taskboard } from "../types/types.ts"
+    import { useAllBoardsStore } from "../stores/allBoards.ts"
+    import { TaskboardClass } from "../models/Taskboard.ts"
+    import PrimaryButton from "./PrimaryButton.vue"
+    import SecondaryButton from "./SecondaryButton.vue"
 
-    import { Taskboard } from "../models/Taskboard.ts"
+    const {currentBoard} = defineProps<{
+        currentBoard?: Taskboard
+    }>()
 
-    const props = defineProps([""])
     const emit = defineEmits(['closeTaskboardModal'])
 
-    const newTaskBoard = ref(new Taskboard())
+    const allBoards = useAllBoardsStore()
 
-    function closeModal () {
+    const taskBoard = ref(new TaskboardClass(currentBoard?.name, currentBoard?.columns))
+
+    function closeTaskBoardModal () {
         emit('closeTaskboardModal')
     }
 
-    const errors = ref({
+    const errors = ref<{boardName:boolean|undefined, column:(boolean|undefined)[]}>({
         boardName: undefined,
         column: [
             undefined,
@@ -23,79 +29,50 @@
         ],
     })
 
-
     function validateBoardName() {
-        if (newBoardName.value === "") {
+        if (taskBoard.value.name === "") {
             errors.value.boardName = true
+            return false
         } else {
             errors.value.boardName = false
+            return true
         }
     }
 
-    function validateColumnName(index) {
-        if (newBoardColumns.value[index] === "") {
+    function validateColumnName(index:number) {
+        if (taskBoard.value.columns[index].name === "") {
             errors.value.column[index] = true
+            return false
         } else {
             errors.value.column[index] = false
+            return true
         }
-    }
-
-    function removeColumn(index) {
-        newBoardColumns.value.splice(index,1)
-    }
-
-    function addColumn() {
-        newBoardColumns.value.push("")
     }
 
     function createNewBoard() {
 
-        validateBoardName()
-        if (errors.boardName || newBoardName === "") {
+        if (!validateBoardName()) {
             return
         }
-        for (let i=0 ; i < newBoardColumns.lenght ; i++){
-            validateColumnName(i)
-            if (errors.column[i] || newBoardColumns[i] === "") {
-                return 
+        for (let i=0 ; i < taskBoard.value.columns.length ; i++ ) {
+            if (!validateColumnName(i)){
+                return
             }
         }
 
-        const newBoard = {
-            name: "",
-            columns: []
-        }
-        newBoard.name = newBoardName.value
-
-        for (let i=0 ; i<newBoardColumns.value.length ; i++) {
-
-            const newColumn = {
-                name: newBoardColumns.value[i],
-                tasks: []
-            }
-
-            newBoard.columns.push(newColumn)
-        }
-
-        emit('addNewBoard', newBoard)
-        newBoardName.value = ""
-        newBoardColumns.value = [
-            "ToDo",
-            "Doing",
-            "Done",
-        ]
-        closeNewTaskModal()
-        
+        allBoards.addNewBoard(taskBoard.value)
+        closeTaskBoardModal()
     }
 
 </script>
 
 <template>
-    <div @click="closeModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen bg-black/50">
+    <div @click="closeTaskBoardModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen bg-black/50">
 
         <div @click.stop class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8">
 
-            <h1 class="heading-l text-black dark:text-white">Add New Board</h1>
+            <h1 v-if="currentBoard" class="heading-l text-black dark:text-white">Edit Board</h1>
+            <h1 v-else="currentBoard" class="heading-l text-black dark:text-white">Add New Board</h1>
 
             <div class="flex flex-col gap-2">
                 <label class="body-m text-medium-grey">Name</label>
@@ -104,16 +81,16 @@
                     class="rounded-sm border py-2 px-4 dark:text-white text-black"
                     :class="[errors.boardName === true ? 'border-red' : 'border-medium-grey']" 
                     placeholder="e.g. Web Design"
-                    v-model="newTaskBoard.name"
+                    v-model="taskBoard.name"
                     @input="validateBoardName"
                 />
                 <span v-if="errors.boardName === true" class="text-red">Please enter a name for the Board!</span>
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-3">
                 <label class="body-m text-medium-grey">Columns</label>
 
-                <div v-for="(column,index) in newTaskBoard.columns" class="flex flex-col">
+                <div v-for="( _,index) in taskBoard.columns" class="flex flex-col" :key="index">
 
                     <div class="flex gap-4 items-center">
                         
@@ -121,14 +98,14 @@
                             type="text" 
                             class="grow rounded-sm border border-medium-grey py-2 px-4 dark:text-white text-black"
                             :class="[errors.column[index] ? 'border-red' : 'border-medium-grey']"
-                            v-model="newTaskBoard.columns[index]"
+                            v-model="taskBoard.columns[index].name"
                             @input="validateColumnName(index)"
                         />
                         
                         <img 
                             src="/public/assets/icon-cross.svg"
                             class="w-4 h-4 hover:cursor-pointer"
-                            v-on:click="removeColumn(index)"
+                            v-on:click="taskBoard.removeColumn(index)"
                         />
 
                     </div>
@@ -137,14 +114,18 @@
 
                 </div>
                 
-                <Button v-on:click="addColumn">
+                <SecondaryButton v-on:click="taskBoard.addColumn()">
                     + Add New Column
-                </Button>
+                </SecondaryButton>
             </div>
 
-            <Button v-on:click="createNewBoard">
+            <PrimaryButton v-if="currentBoard" v-on:click="">
+                Save Changes
+            </PrimaryButton>
+
+            <PrimaryButton v-else="currentBoard" v-on:click="createNewBoard">
                 Create New Board
-            </Button>
+            </PrimaryButton>
         </div>
 
     </div>
