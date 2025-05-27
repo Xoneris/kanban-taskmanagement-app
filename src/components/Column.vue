@@ -1,4 +1,4 @@
-<script setup>
+<script setup  lang="ts">
     import Task from "./Task.vue"
     const { column } = defineProps(["column"])
 </script>

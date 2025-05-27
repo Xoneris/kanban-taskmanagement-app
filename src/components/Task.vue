@@ -1,5 +1,6 @@
-<script setup>
+<script setup  lang="ts">
     import { ref } from 'vue'
+    import type { Subtask } from '../types/types'
     const { task } = defineProps(["task"])
 
     const openTask = ref(false)
@@ -20,7 +21,7 @@
     >
         <h4 class="heading-m">{{ task.title }}</h4>
         <span class="body-m text-medium-grey">
-            {{ task.subtasks.filter((subtask) => subtask.isCompleted === true).length }} 
+            {{ task.subtasks.filter((subtask:Subtask) => subtask.isCompleted === true).length }} 
             of 
             {{ task.subtasks.length }} 
             subtasks
@@ -34,7 +35,7 @@
             <p class="body-l text-medium-grey">{{ task.description }}</p>
 
             <h3 class="body-m text-medium-grey dark:text-white">
-                Subtasks ({{ task.subtasks.filter((subtask) => subtask.isCompleted === true).length }} 
+                Subtasks ({{ task.subtasks.filter((subtask:Subtask) => subtask.isCompleted === true).length }} 
                 of 
                 {{ task.subtasks.length }}) 
             </h3>

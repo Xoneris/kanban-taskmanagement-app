@@ -1,5 +1,5 @@
-<script setup>
-    const {currentBoard, board} = defineProps(["currentBoard","boardName"])
+<script setup lang="ts">
+    const {currentBoard, boardName} = defineProps(["currentBoard","boardName"])
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup  lang="ts">
     import { useCurrentBoardStore } from "../stores/currentBoard"
     import { useSidebarStore } from "../stores/sidebar"
     import { useDarkModeStore } from "../stores/darkmode"

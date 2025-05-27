@@ -1,4 +1,4 @@
-<script setup>
+<script setup  lang="ts">
     import { useCurrentBoardStore } from "../stores/currentBoard";
     import PrimaryButton from "./PrimaryButton.vue";
     import Column from "./Column.vue"
