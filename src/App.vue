@@ -1,23 +1,8 @@
 <script setup lang="ts">
-  import data from "./data/data.json"
-  import { ref } from 'vue'
 
   import Sidebar from "./components/Sidebar.vue"
   import Header from "./components/Header.vue"
   import Taskboard from "./components/Taskboard.vue"
-
-  const allBoards = ref(data)
-  const currentBoard = ref(data[0])
-
-
-
-  function handleUpdate(value:number) {
-    currentBoard.value = data[value]
-  }
-
-  // function addNewBoard(newBoard) {
-  //   allBoards.value.push(newBoard)
-  // }
 
 </script>
 
