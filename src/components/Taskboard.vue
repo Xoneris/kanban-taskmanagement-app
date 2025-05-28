@@ -8,13 +8,13 @@
 </script>
 
 <template>
-    <div v-if="currentBoard.board.columns.length > 0" class="bg-light-grey dark:bg-very-dark-grey grow flex gap-6 p-6 justify-start items-start transition-all">
+    <div v-if="currentBoard.board.columns.length > 0" class="w-full bg-light-grey dark:bg-very-dark-grey grow flex gap-6 p-6 justify-start items-start transition-all overflow-x-scroll">
 
         <Column v-for="column in currentBoard.board.columns" 
             :column="column"
         />
 
-        <div class="grow max-w-[280px] mt-9 h-[calc(100%-36px)] bg-[#E9EFFA] dark:bg-dark-grey/25 heading-xl text-medium-grey rounded-[6px] flex justify-center items-center">
+        <div class="grow min-w-[280px] max-w-[280px] mt-9 h-[calc(100%-36px)] bg-[#E9EFFA] dark:bg-dark-grey/25 heading-xl text-medium-grey rounded-[6px] flex justify-center items-center">
             + New Column
         </div>
     </div>

@@ -13,7 +13,7 @@
 
       <Sidebar/>
 
-      <div class="grow flex flex-col">
+      <div class="grow flex flex-col overflow-x-hidden">
         
         <Header/>
           

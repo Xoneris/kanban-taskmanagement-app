@@ -13,7 +13,7 @@
 <template>
     <div 
         class="w-[300px] flex flex-col border-r border-lines-light dark:border-lines bg-white dark:bg-dark-grey overflow-hidden transition-all"
-        :class="[sidebarStore.isSidebar ? 'max-w-[300px] w-full' : 'max-w-0']"
+        :class="[sidebarStore.isSidebar ? 'min-w-[300px] max-w-[300px] w-full' : 'min-w-0 max-w-0']"
     >
 
         <div class="pt-8 pl-[34px] pb-[54px]">

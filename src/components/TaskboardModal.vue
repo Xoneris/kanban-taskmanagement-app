@@ -1,20 +1,33 @@
 <script setup lang="ts">
     import { ref } from "vue" 
-    import type { Taskboard } from "../types/types.ts"
+    import { useCurrentBoardStore } from "../stores/currentBoard.ts"
     import { useAllBoardsStore } from "../stores/allBoards.ts"
     import { TaskboardClass } from "../models/Taskboard.ts"
     import PrimaryButton from "./PrimaryButton.vue"
     import SecondaryButton from "./SecondaryButton.vue"
 
-    const {currentBoard} = defineProps<{
-        currentBoard?: Taskboard
+    const { editBoard } = defineProps<{
+        editBoard?: boolean
     }>()
 
     const emit = defineEmits(['closeTaskboardModal'])
 
     const allBoards = useAllBoardsStore()
+    const currentBoard = useCurrentBoardStore()
 
-    const taskBoard = ref(new TaskboardClass(currentBoard?.name, currentBoard?.columns))
+    const cloneCurrentBoard = {
+        name: currentBoard.board.name,
+        columns: currentBoard.board.columns.map((col) => {
+            return {
+                name: col.name,
+                tasks: [...col.tasks]
+            }
+        }),
+    }
+
+    const taskBoard = editBoard 
+        ? ref(new TaskboardClass(cloneCurrentBoard.name, cloneCurrentBoard.columns))
+        : ref(new TaskboardClass())
 
     function closeTaskBoardModal () {
         emit('closeTaskboardModal')
@@ -64,6 +77,22 @@
         closeTaskBoardModal()
     }
 
+    function editCurrentBoard() {
+
+        if (!validateBoardName()) {
+            return
+        }
+        for (let i=0 ; i < taskBoard.value.columns.length ; i++ ) {
+            if (!validateColumnName(i)){
+                return
+            }
+        }
+
+        allBoards.edit(currentBoard.board.name, taskBoard.value)
+
+        closeTaskBoardModal()
+    }
+
 </script>
 
 <template>
@@ -71,8 +100,8 @@
 
         <div @click.stop class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8">
 
-            <h1 v-if="currentBoard" class="heading-l text-black dark:text-white">Edit Board</h1>
-            <h1 v-else="currentBoard" class="heading-l text-black dark:text-white">Add New Board</h1>
+            <h1 v-if="editBoard" class="heading-l text-black dark:text-white">Edit Board</h1>
+            <h1 v-else class="heading-l text-black dark:text-white">Add New Board</h1>
 
             <div class="flex flex-col gap-2">
                 <label class="body-m text-medium-grey">Name</label>
@@ -119,11 +148,11 @@
                 </SecondaryButton>
             </div>
 
-            <PrimaryButton v-if="currentBoard" v-on:click="">
+            <PrimaryButton v-if="editBoard" v-on:click="editCurrentBoard">
                 Save Changes
             </PrimaryButton>
 
-            <PrimaryButton v-else="currentBoard" v-on:click="createNewBoard">
+            <PrimaryButton v-else v-on:click="createNewBoard">
                 Create New Board
             </PrimaryButton>
         </div>

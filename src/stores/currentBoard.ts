@@ -1,15 +1,20 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import data from "../data/data.json"
+import { useAllBoardsStore } from "./allBoards"
 
 export const useCurrentBoardStore = defineStore('currentBoard', () => {
 
-    const board = ref(data[0])
+    const allBoards = useAllBoardsStore()
 
-    function changeCurrentBoard(value:number) {
-        board.value = data[value]
+    const board = ref(allBoards.allBoards[0])
+
+    function changeCurrentBoard(index:number) {
+        board.value = allBoards.allBoards[index]
     }
 
+    function updateCurrentBoard(index:number) {
+        board.value = allBoards.allBoards[index]
+    }
 
-    return { board, changeCurrentBoard }
+    return { board, changeCurrentBoard, updateCurrentBoard }
 })
