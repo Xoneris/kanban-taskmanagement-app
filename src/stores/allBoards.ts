@@ -3,7 +3,7 @@ import { computed, ref } from "vue"
 import { useCurrentBoardStore } from "./currentBoard"
 import data from "../data/data.json"
 
-import type { Column, Taskboard } from "../types/types"
+import type { Taskboard } from "../types/types"
 
 export const useAllBoardsStore = defineStore('allBoards', () => {
 
