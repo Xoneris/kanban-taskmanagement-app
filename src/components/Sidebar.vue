@@ -35,7 +35,7 @@
         </div>
 
         <div 
-            class="mr-6 py-4 pl-8 my-2 flex gap-4 items-center rounded-r-full text-medium-grey hover:dark:bg-white hover:dark:text-main-purple hover:text-main-purple hover:bg-main-purple/10 hover:cursor-pointer transition-all"
+            class="mr-6 py-4 pl-8 my-2 mb-10 flex gap-4 items-center rounded-r-full text-medium-grey hover:dark:bg-white hover:dark:text-main-purple hover:text-main-purple hover:bg-main-purple/10 hover:cursor-pointer transition-all"
             v-on:click="sidebarStore.toggleSidebar(false)"
         >
             <img src="/public/assets/icon-hide-sidebar.svg" class="w-[18px] h-4" />

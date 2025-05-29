@@ -6,6 +6,7 @@
     import PrimaryButton from "./PrimaryButton.vue"
     import TaskboardModal from "./TaskboardModal.vue"
     import DeleteTaskboardModal from "./DeleteTaskboardModal.vue"
+import AddOrEditTaskModal from "./AddOrEditTaskModal.vue"
 
     const sidebarStore = useSidebarStore()
     const darkModeStore = useDarkModeStore()
@@ -14,6 +15,11 @@
     const openTaskbarOptions = ref(false)
     const showTaskboardModal = ref(false)
     const showDeleteTaskboardModal = ref(false)
+    const openAddOrEditTaskModal = ref(false)
+
+    function closeAddOrEditTaskModal() {
+        openAddOrEditTaskModal.value = false
+    }
 
     function closeTaskboardModal() {
         showTaskboardModal.value = false
@@ -37,7 +43,9 @@
 
             <h1 class="heading-xl">{{ currentBoard.board.name }}</h1>
             <div class="flex gap-6 items-center">
-                <PrimaryButton>
+                <PrimaryButton
+                    v-on:click="openAddOrEditTaskModal = true"
+                >
                     + Add New Task
                 </PrimaryButton>
                 <img 
@@ -83,5 +91,12 @@
     <DeleteTaskboardModal 
         v-if="showDeleteTaskboardModal"
         @closeDeleteTaskboardModal="closeDeleteTaskboardModal"
+    />
+
+    <AddOrEditTaskModal
+        v-if="openAddOrEditTaskModal" 
+        :task="null"
+        :column="null"
+        @closeAddOrEditTaskModal="closeAddOrEditTaskModal"
     />
 </template>

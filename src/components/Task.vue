@@ -2,12 +2,33 @@
     import { ref } from 'vue'
     import type { Subtask } from '../types/types'
     import TaskModal from './TaskModal.vue'
+    import AddOrEditTaskModal from './AddOrEditTaskModal.vue'
+    import DeleteTaskModal from './DeleteTaskModal.vue'
     
     const { task, column } = defineProps(["task", "column"])
+
     const openTaskModal = ref(false)
+    const openAddOrEditTaskModal = ref(false)
+    const openDeleteTaskModal = ref(false)
 
     function closeTaskModal() {
         openTaskModal.value = false
+    }
+
+    function showAddOrEditTaskModal() {
+        openAddOrEditTaskModal.value = true
+    }
+
+    function closeAddOrEditTaskModal() {
+        openAddOrEditTaskModal.value = false
+    }
+
+    function showDeleteTaskModal() {
+        openDeleteTaskModal.value = true
+    }
+
+    function closeDeleteTaskModal() {
+        openDeleteTaskModal.value = false
     }
 </script>
 
@@ -30,7 +51,23 @@
         v-if="openTaskModal" 
         :task="task"
         :column="column"
+        @showAddOrEditTaskModal="showAddOrEditTaskModal"
+        @showDeleteTaskModal="showDeleteTaskModal"
         @closeTaskModal="closeTaskModal"
+    />
+
+    <AddOrEditTaskModal
+        v-if="openAddOrEditTaskModal" 
+        :task="task"
+        :column="column"
+        @closeAddOrEditTaskModal="closeAddOrEditTaskModal"
+    />
+
+    <DeleteTaskModal 
+        v-if="openDeleteTaskModal"
+        :task="task"
+        :column="column"
+        @closeDeleteTaskModal="closeDeleteTaskModal"
     />
 
 </template>

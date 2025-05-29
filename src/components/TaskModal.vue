@@ -2,22 +2,40 @@
 
     import { ref } from 'vue';
     import { useCurrentBoardStore } from '../stores/currentBoard';
+    import { useAllBoardsStore } from '../stores/allBoards';
     import type { Subtask } from '../types/types';
-import { useAllBoardsStore } from '../stores/allBoards';
-    const { task, column } = defineProps(["task","column"])
+
+    const { task, column} = defineProps(["task","column"])
 
     const currentBoard = useCurrentBoardStore()
     const allBoardsStore = useAllBoardsStore()
 
-    const emit = defineEmits()
+    const emit = defineEmits(["closeTaskModal","showAddOrEditTaskModal","showDeleteTaskModal"])
 
     const openTaskOptions = ref(false)
     // const showTaskModal = ref(false)
     // const showDeleteTaskModal = ref(false)
 
     function closeTaskModal() {
-
         emit('closeTaskModal')
+    }
+    function showAddOrEditTaskModal() {
+        emit('showAddOrEditTaskModal')
+    }
+    function showDeleteTaskModal() {
+        emit('showDeleteTaskModal')
+    }
+
+    function editTask() {
+        showAddOrEditTaskModal()
+        openTaskOptions.value = false
+        closeTaskModal()
+    }
+
+    function deleteTask() {
+        showDeleteTaskModal()
+        openTaskOptions.value = false
+        closeTaskModal()
     }
 
 </script>
@@ -47,13 +65,13 @@ import { useAllBoardsStore } from '../stores/allBoards';
                     >
                         <span 
                             class="body-l text-medium-grey hover:underline hover:cursor-pointer"
-                            v-on:click="showTaskboardModal = true, openTaskOptions = false"
+                            v-on:click="editTask"
                         >
                             Edit Task
                         </span>
                         <span 
                             class="body-l text-red hover:underline hover:cursor-pointer"
-                            v-on:click="showDeleteTaskboardModal = true, openTaskOptions = false"
+                            v-on:click="deleteTask"
                         >
                             Delete Task
                         </span>
@@ -73,11 +91,11 @@ import { useAllBoardsStore } from '../stores/allBoards';
 
                 <input 
                     type="checkbox"
-                    v-model="subtask.isCompleted"
+                    
                     :id="'subtask'+index"
                     class="appearance-none min-w-5 min-h-5 max-w-5 max-h-5 border-2 text-white border-medium-grey/25 rounded-sm bg-white dark:bg-dark-grey checked:bg-main-purple checked:border-0 checked:after:content-['✓'] after:flex after:justify-center after:items-center"
                     :checked="subtask.isCompleted"
-                    v-on:change="allBoardsStore.updateSubtask(column.name, task.title, index)"
+                    v-on:change="allBoardsStore.updateSubtaskCompleation(column.name, task.title, index)"
                 />
 
                 <label
@@ -99,6 +117,6 @@ import { useAllBoardsStore } from '../stores/allBoards';
 
             </select>
         </div>
-        
+
     </div>
 </template>
