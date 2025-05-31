@@ -5,7 +5,7 @@
     import AddOrEditTaskModal from './AddOrEditTaskModal.vue'
     import DeleteTaskModal from './DeleteTaskModal.vue'
     
-    const { task, column } = defineProps(["task", "column"])
+    const { task, column, taskIndex } = defineProps(["task", "column", "taskIndex"])
 
     const openTaskModal = ref(false)
     const openAddOrEditTaskModal = ref(false)
@@ -59,6 +59,7 @@
     <AddOrEditTaskModal
         v-if="openAddOrEditTaskModal" 
         :task="task"
+        :editTask="true"
         :column="column"
         @closeAddOrEditTaskModal="closeAddOrEditTaskModal"
     />

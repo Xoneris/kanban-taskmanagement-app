@@ -6,7 +6,7 @@
     import PrimaryButton from "./PrimaryButton.vue"
     import TaskboardModal from "./TaskboardModal.vue"
     import DeleteTaskboardModal from "./DeleteTaskboardModal.vue"
-import AddOrEditTaskModal from "./AddOrEditTaskModal.vue"
+    import AddOrEditTaskModal from "./AddOrEditTaskModal.vue"
 
     const sidebarStore = useSidebarStore()
     const darkModeStore = useDarkModeStore()
@@ -96,6 +96,7 @@ import AddOrEditTaskModal from "./AddOrEditTaskModal.vue"
     <AddOrEditTaskModal
         v-if="openAddOrEditTaskModal" 
         :task="null"
+        :editTask="false"
         :column="null"
         @closeAddOrEditTaskModal="closeAddOrEditTaskModal"
     />

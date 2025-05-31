@@ -9,9 +9,10 @@
         <h3 class="heading-s">{{ column.name }} ({{ column.tasks.length }})</h3>
 
         <Task 
-            v-for="task in column.tasks"
+            v-for="(task,index) in column.tasks"
             :column="column"
             :task="task" 
+            :taskIndex="index"
         />
 
     </div>

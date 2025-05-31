@@ -1,21 +1,22 @@
 export type Taskboard = {
-    name: string,
+    name: string
     columns: Column[]
 }
 
 export type Column = {
-    name: string,
+    name: string
     tasks: Task[]
 }
 
 export type Task = {
-    title: string;
-    description: string;
-    status: string;
+    title: string
+    description: string
+    status: string
     subtasks: Subtask[]
 }
 
 export type Subtask = {
-    title: string;
-    isCompleted: boolean;
+    title: string
+    placeholder?: string
+    isCompleted: boolean
 }

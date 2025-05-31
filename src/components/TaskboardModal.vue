@@ -104,7 +104,7 @@
             <h1 v-else class="heading-l text-black dark:text-white">Add New Board</h1>
 
             <div class="flex flex-col gap-2">
-                <label class="body-m text-medium-grey">Name</label>
+                <label class="body-m text-medium-grey dark:text-white">Name</label>
                 <input 
                     type="text" 
                     class="rounded-sm border py-2 px-4 dark:text-white text-black"
@@ -117,7 +117,7 @@
             </div>
 
             <div class="flex flex-col gap-3">
-                <label class="body-m text-medium-grey">Columns</label>
+                <label class="body-m text-medium-grey dark:text-white">Columns</label>
 
                 <div v-for="( _,index) in taskBoard.columns" class="flex flex-col" :key="index">
 
