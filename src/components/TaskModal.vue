@@ -3,18 +3,21 @@
     import { ref } from 'vue';
     import { useCurrentBoardStore } from '../stores/currentBoard';
     import { useAllBoardsStore } from '../stores/allBoards';
-    import type { Subtask } from '../types/types';
+    import type { Column, Subtask, Task } from '../types/types';
 
-    const { task, column} = defineProps(["task","column"])
+    const { task, column } = defineProps<{
+        task: Task,
+        column: Column,
+    }>()
 
     const currentBoard = useCurrentBoardStore()
     const allBoardsStore = useAllBoardsStore()
 
+    const statusOptions = ref(false)
+
     const emit = defineEmits(["closeTaskModal","showAddOrEditTaskModal","showDeleteTaskModal"])
 
     const openTaskOptions = ref(false)
-    // const showTaskModal = ref(false)
-    // const showDeleteTaskModal = ref(false)
 
     function closeTaskModal() {
         emit('closeTaskModal')
@@ -36,6 +39,12 @@
         showDeleteTaskModal()
         openTaskOptions.value = false
         closeTaskModal()
+    }
+
+    function updateStatus(statusName:string){
+
+        allBoardsStore.updateTaskStatus(column.name, task.title, statusName)
+        statusOptions.value = false
     }
 
 </script>
@@ -109,13 +118,37 @@
             </div>
 
             <h3 class="body-m text-medium-grey dark:text-white">Current Status</h3>
-            <select 
+
+            <!-- <select 
                 class="rounded-sm px-4 py-2 border border-medium-grey text-black dark:text-white">
                 <option v-for="column in currentBoard.board.columns">
                     {{ column.name }}
                 </option>
+            </select> -->
 
-            </select>
+            <div 
+                class="relative h-10 rounded-sm border border-medium-grey flex justify-between items-center px-4 hover:cursor-pointer"
+                v-on:click="statusOptions = !statusOptions"
+            >
+                <span class="text-black dark:text-white">{{ task.status }}</span>
+                <img
+                    src="/public/assets/icon-chevron-down.svg"
+                />
+                <div 
+                    v-if="statusOptions" 
+                    @click.stop 
+                    class="absolute top-11 left-0 flex flex-col w-full bg-white dark:bg-very-dark-grey rounded-md z-50 border border-medium-grey transition-all"
+                    :class="[statusOptions ? 'max-h-[500px]' : 'max-h-0']"
+                >
+                    <span
+                        class="p-2 text-black dark:text-medium-grey hover:bg-main-purple hover:text-white"
+                        v-for="currentBoardColumn in currentBoard.board.columns"
+                        v-on:click="updateStatus(currentBoardColumn.name)"
+                    >
+                        {{ currentBoardColumn.name }}
+                    </span>
+                </div>
+            </div>
         </div>
 
     </div>

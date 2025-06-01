@@ -1,6 +1,9 @@
 <script setup  lang="ts">
+    import type { Column } from "../types/types";
     import Task from "./Task.vue"
-    const { column } = defineProps(["column"])
+    const { column } = defineProps<{
+        column: Column
+    }>()
 </script>
 
 <template>

@@ -1,11 +1,15 @@
 <script setup  lang="ts">
     import { ref } from 'vue'
-    import type { Subtask } from '../types/types'
+    import type { Column, Subtask, Task } from '../types/types'
     import TaskModal from './TaskModal.vue'
     import AddOrEditTaskModal from './AddOrEditTaskModal.vue'
     import DeleteTaskModal from './DeleteTaskModal.vue'
     
-    const { task, column, taskIndex } = defineProps(["task", "column", "taskIndex"])
+    const { task, column } = defineProps<{
+        task: Task,
+        column: Column,
+        taskIndex: number,
+    }>()
 
     const openTaskModal = ref(false)
     const openAddOrEditTaskModal = ref(false)

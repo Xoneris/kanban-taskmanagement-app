@@ -15,12 +15,10 @@ export class TaskClass {
         this.subtasks = subtasks || [
             {
                 title: "",
-                placeholder: "e.g. Make coffee",
                 isCompleted: false
             },
             {
                 title: "",
-                placeholder: "e.g. Drink coffee & smile",
                 isCompleted: false
             },
         ]

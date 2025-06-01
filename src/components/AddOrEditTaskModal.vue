@@ -19,7 +19,7 @@
     const emit = defineEmits(["closeAddOrEditTaskModal"])
 
     const currentColumnIndex = currentBoardStore.board.columns.findIndex((c) => c.name === column?.name)
-    const taskIndex = currentBoardStore.board.columns[currentColumnIndex].tasks.findIndex((t) => t.title === task?.title) 
+    const taskIndex = currentBoardStore.board.columns[currentColumnIndex]?.tasks?.findIndex((t) => t.title === task?.title) 
 
     const cloneCurrentTask:any = {
         title: task?.title,
@@ -43,9 +43,10 @@
         emit('closeAddOrEditTaskModal')
     }
 
-    const errors = ref<{taskTitle:boolean|undefined, taskDescription:boolean|undefined, taskSubtasks:(boolean|undefined)[]}>({
+    const errors = ref<{taskTitle:boolean|undefined, taskDescription:boolean|undefined, taskStatus: boolean|undefined, taskSubtasks:(boolean|undefined)[]}>({
         taskTitle: undefined,
         taskDescription: undefined,
+        taskStatus: undefined,
         taskSubtasks: [
             undefined,
             undefined,
@@ -55,8 +56,8 @@
     function updateStatus(statusName:string){
 
         taskClass.value.status = statusName
+        errors.value.taskStatus = false
         statusOptions.value = false
-
     }
 
     function validateTaskTitle(){
@@ -88,6 +89,16 @@
         }
     }
 
+    function validateTaskStatus() {
+        if (taskClass.value.status === "") {
+            errors.value.taskStatus = true
+            return false
+        } else {
+            errors.value.taskStatus = false
+            return true
+        }
+    }
+
     function editCurrentTask(){
         if (!validateTaskTitle()) {
             return
@@ -97,10 +108,11 @@
                 return
             }
         }
+        if (!validateTaskStatus()){
+            return
+        }
 
-        console.log(taskIndex)
-
-        allBoardsStore.editTask(taskClass.value, taskIndex)
+        allBoardsStore.editTask(taskClass.value, column!.name, taskIndex)
         closeAddOrEditTaskModal()
     }
 
@@ -113,6 +125,11 @@
                 return
             }
         }
+        if (!validateTaskStatus()){
+            console.log(taskClass)
+            return
+        }
+        console.log("pred")
         
         allBoardsStore.newTask(taskClass.value)
         closeAddOrEditTaskModal()
@@ -128,7 +145,7 @@
             <h1 v-else class="heading-l text-black dark:text-white">Add New Task</h1>
 
             <div class="flex flex-col gap-2">
-                <label class="body-m text-medium-grey dark:text-white">Title - {{ taskIndex }}</label>
+                <label class="body-m text-medium-grey dark:text-white">Title</label>
                 <input 
                     type="text" 
                     class="rounded-sm border py-2 px-4 dark:text-white text-black"
@@ -163,7 +180,13 @@
                         <input 
                             type="text" 
                             class="grow rounded-sm border border-medium-grey py-2 px-4 dark:text-white text-black"
-                            :placeholder="taskClass.subtasks[index].placeholder"
+                            :placeholder="
+                                index === 0 
+                                    ? 'e.g. Make coffee'
+                                    : index === 1
+                                    ? 'e.g. Drink coffee & smile'
+                                    : ''
+                            "
                             :class="[errors.taskSubtasks[index] ? 'border-red' : 'border-medium-grey']"
                             v-model="taskClass.subtasks[index].title"
                             @input="validateSubtaskTitle(index)"
@@ -194,7 +217,7 @@
                     class="relative h-10 rounded-sm border border-medium-grey flex justify-between items-center px-4 hover:cursor-pointer"
                     v-on:click="statusOptions = !statusOptions"
                 >
-                    <span>{{ taskClass.status }}</span>
+                    <span class="text-black dark:text-white">{{ taskClass.status }}</span>
                     <img
                         src="/public/assets/icon-chevron-down.svg"
                     />
@@ -202,19 +225,21 @@
                     <div 
                         v-if="statusOptions" 
                         @click.stop 
-                        class="absolute top-9 left-0 flex flex-col w-full bg-white rounded-b-md z-50 border border-medium-grey transition-all"
+                        class="absolute top-11 left-0 flex flex-col w-full bg-white dark:bg-very-dark-grey rounded-md z-50 border border-medium-grey transition-all"
                         :class="[statusOptions ? 'max-h-[500px]' : 'max-h-0']"
                     >
                         <span
-                            class="p-2 text-medium-grey hover:bg-main-purple hover:text-white"
-                            v-for="status in currentBoardStore.board.columns"
-                            v-on:click="updateStatus(status.name)"
+                            class="p-2 text-black dark:text-medium-grey hover:bg-main-purple hover:text-white"
+                            v-for="currentBoardColumn in currentBoardStore.board.columns"
+                            v-on:click="updateStatus(currentBoardColumn.name)"
                         >
-                            {{ status.name }}
+                            {{ currentBoardColumn.name }}
                         </span>
                     </div>
 
                 </div>
+
+                <span v-if="errors.taskStatus" class="text-red">Please select a status</span>
 
             </div>
 

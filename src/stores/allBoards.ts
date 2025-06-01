@@ -3,7 +3,7 @@ import { computed, ref } from "vue"
 import { useCurrentBoardStore } from "./currentBoard"
 import data from "../data/data.json"
 
-import type { Taskboard, Task } from "../types/types"
+import type { Taskboard, Task, Subtask } from "../types/types"
 
 export const useAllBoardsStore = defineStore('allBoards', () => {
 
@@ -57,21 +57,23 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
     }
 
 
-    function editTask(currentTask:Task, editedTaskIndex:number) {
+    function editTask(updatedTask:Task, columnName:string, editedTaskIndex:number) {
 
         const currentBoardIndex = allBoards.value.findIndex((board) => board.name === currentBoardStore.board.name)
-        const currentColumnIndex = allBoards.value[currentBoardIndex].columns.findIndex((column) => column.name === currentTask.status)
-        // const currentTaskIndex = allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.findIndex((task) => task.title === currentTask.title) 
+        const currentColumnIndex = allBoards.value[currentBoardIndex].columns.findIndex((column) => column.name === columnName)
+        const targetColumnIndex = allBoards.value[currentBoardIndex].columns.findIndex((column) => column.name === updatedTask.status)
 
         // Insert API Route to update a Task
 
-        console.log(currentTask)
-        console.log(currentBoardIndex)
-        console.log(currentColumnIndex)
-        console.log(editedTaskIndex)
-
-        allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks[editedTaskIndex] = currentTask
-
+        if (updatedTask.status === columnName) {
+            allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks[editedTaskIndex] = updatedTask
+        } else {
+            allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex)
+            allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks.push(updatedTask)
+        }
+        // allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex,1)
+        
+        
     }
 
     function deleteTask(columnName:string, taskTitle:string) {
@@ -86,6 +88,36 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
 
     }
 
+    function updateTaskStatus(columnName:string, taskTitle: string, statusName:string) {
+
+        const currentBoardIndex = allBoards.value.findIndex((board) => board.name === currentBoardStore.board.name)
+        const currentColumnIndex = allBoards.value[currentBoardIndex].columns.findIndex((column) => column.name === columnName)
+        const targetColumnIndex = allBoards.value[currentBoardIndex].columns.findIndex((column) => column.name === statusName)
+        const currentTaskIndex = allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.findIndex((task) => task.title === taskTitle)
+
+        // Insert API Route to update the status of a Task
+
+        allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks[currentTaskIndex].status = statusName
+
+        const currentTask:Task = allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks[currentTaskIndex]
+        const taskClone:Task = {
+            title: currentTask.title,
+            description: currentTask.description,
+            status: statusName,
+            subtasks: currentTask.subtasks.map((subtask:Subtask) => {
+                return {
+                    title: subtask.title,
+                    isCompleted: subtask.isCompleted,
+                }
+            }),
+        }
+
+        allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(currentTaskIndex,1)
+        allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks.push(taskClone)
+
+        // currentBoardStore.board.columns[currentColumnIndex].tasks[currentTaskIndex].status = statusName
+
+    }
 
     function updateSubtaskCompleation(columnName:string, taskTitle:string, subTaskIndex:number) {
 
@@ -111,5 +143,5 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
         return boardNames
     })
 
-    return { allBoards, getNamesOfAllBoards, addNewBoard, edit, deleteBoard, newTask, editTask, deleteTask, updateSubtaskCompleation }
+    return { allBoards, getNamesOfAllBoards, addNewBoard, edit, deleteBoard, newTask, editTask, deleteTask, updateTaskStatus, updateSubtaskCompleation }
 })

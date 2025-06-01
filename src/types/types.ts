@@ -17,6 +17,5 @@ export type Task = {
 
 export type Subtask = {
     title: string
-    placeholder?: string
     isCompleted: boolean
 }
