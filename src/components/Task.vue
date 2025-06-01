@@ -8,7 +8,6 @@
     const { task, column } = defineProps<{
         task: Task,
         column: Column,
-        taskIndex: number,
     }>()
 
     const openTaskModal = ref(false)
