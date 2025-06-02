@@ -52,10 +52,10 @@
 <template>
     <div 
         v-on:click="closeTaskModal" 
-        class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen bg-black/50"
+        class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50"
     >
 
-        <div @click.stop class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-dark-grey w-full max-w-[480px] flex flex-col gap-4 rounded-[6px] p-8">
+        <div @click.stop class="relative bg-white dark:bg-dark-grey w-full max-w-[480px] flex flex-col gap-4 rounded-[6px] p-8 mx-4">
 
             <div class="flex gap-6 items-center">
 
@@ -100,7 +100,6 @@
 
                 <input 
                     type="checkbox"
-                    
                     :id="'subtask'+index"
                     class="appearance-none min-w-5 min-h-5 max-w-5 max-h-5 border-2 text-white border-medium-grey/25 rounded-sm bg-white dark:bg-dark-grey checked:bg-main-purple checked:border-0 checked:after:content-['✓'] after:flex after:justify-center after:items-center"
                     :checked="subtask.isCompleted"
@@ -119,23 +118,22 @@
 
             <h3 class="body-m text-medium-grey dark:text-white">Current Status</h3>
 
-            <!-- <select 
-                class="rounded-sm px-4 py-2 border border-medium-grey text-black dark:text-white">
-                <option v-for="column in currentBoard.board.columns">
-                    {{ column.name }}
-                </option>
-            </select> -->
-
-            <div 
-                class="relative h-10 rounded-sm border border-medium-grey flex justify-between items-center px-4 hover:cursor-pointer"
+            <div
+                class="relative h-10 rounded-sm border flex justify-between items-center px-4 hover:cursor-pointer"
                 v-on:click="statusOptions = !statusOptions"
+                :class="statusOptions ? 'border-main-purple' : 'border-medium-grey'"
             >
                 <span class="text-black dark:text-white">{{ task.status }}</span>
                 <img
+                    v-if="statusOptions"
+                    src="/public/assets/icon-chevron-up.svg"
+                />
+                <img
+                    v-else
                     src="/public/assets/icon-chevron-down.svg"
                 />
                 <div 
-                    v-if="statusOptions" 
+                    v-if="statusOptions"
                     @click.stop 
                     class="absolute top-11 left-0 flex flex-col w-full bg-white dark:bg-very-dark-grey rounded-md z-50 border border-medium-grey transition-all"
                     :class="[statusOptions ? 'max-h-[500px]' : 'max-h-0']"

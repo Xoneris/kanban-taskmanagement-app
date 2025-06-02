@@ -8,7 +8,6 @@
     import PrimaryButton from './PrimaryButton.vue';
     import SecondaryButton from './SecondaryButton.vue';
 
-    // const { task, editTask, taskIndex } = defineProps(['task','editTask','taskIndex'])
     const { task, column, editTask } = defineProps<{
         task: Task|null,
         column: Column|null,
@@ -138,9 +137,9 @@
 </script>
 
 <template>
-    <div @click="closeAddOrEditTaskModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen bg-black/50">
+    <div @click="closeAddOrEditTaskModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50">
 
-        <div @click.stop class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8">
+        <div @click.stop class="dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8 mx-4">
             <h1 v-if="editTask" class="heading-l text-black dark:text-white">Edit Task</h1>
             <h1 v-else class="heading-l text-black dark:text-white">Add New Task</h1>
 
@@ -148,7 +147,7 @@
                 <label class="body-m text-medium-grey dark:text-white">Title</label>
                 <input 
                     type="text" 
-                    class="rounded-sm border py-2 px-4 dark:text-white text-black"
+                    class="rounded-sm border py-2 px-4 dark:text-white text-black focus:border-main-purple focus:outline-none"
                     :class="[errors.taskTitle === true ? 'border-red' : 'border-medium-grey']" 
                     placeholder="e.g. Take coffee break"
                     v-model="taskClass.title"
@@ -161,7 +160,7 @@
                 <label class="body-m text-medium-grey dark:text-white">Description</label>
                 <textarea 
                     type="text" 
-                    class="rounded-sm border py-2 px-4 h-[112px] dark:text-white text-black flex justify-start items-start"
+                    class="rounded-sm border py-2 px-4 h-[112px] dark:text-white text-black flex justify-start items-start focus:border-main-purple focus:outline-none"
                     :class="[errors.taskDescription === true ? 'border-red' : 'border-medium-grey']" 
                     placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."
                     v-model="taskClass.description"
@@ -179,7 +178,7 @@
                         
                         <input 
                             type="text" 
-                            class="grow rounded-sm border border-medium-grey py-2 px-4 dark:text-white text-black"
+                            class="grow rounded-sm border border-medium-grey py-2 px-4 dark:text-white text-black focus:border-main-purple focus:outline-none"
                             :placeholder="
                                 index === 0 
                                     ? 'e.g. Make coffee'
@@ -214,8 +213,9 @@
                 <h3 class="body-m text-medium-grey dark:text-white">Status</h3>
 
                 <div 
-                    class="relative h-10 rounded-sm border border-medium-grey flex justify-between items-center px-4 hover:cursor-pointer"
+                    class="relative h-10 rounded-sm border  flex justify-between items-center px-4 hover:cursor-pointer"
                     v-on:click="statusOptions = !statusOptions"
+                    :class="statusOptions ? 'border-main-purple' : 'border-medium-grey'"
                 >
                     <span class="text-black dark:text-white">{{ taskClass.status }}</span>
                     <img
