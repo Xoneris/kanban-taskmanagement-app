@@ -50,12 +50,13 @@
 </script>
 
 <template>
+    <Teleport to="body">
     <div 
         v-on:click="closeTaskModal" 
-        class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50"
+        class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50 overflow-hidden"
     >
 
-        <div @click.stop class="relative bg-white dark:bg-dark-grey w-full max-w-[480px] flex flex-col gap-4 rounded-[6px] p-8 mx-4">
+        <div @click.stop class="relative bg-white dark:bg-dark-grey w-full max-w-[480px] max-h-[90vh] flex flex-col gap-4 rounded-[6px] p-8 mx-4 overflow-y-auto ">
 
             <div class="flex gap-6 items-center">
 
@@ -150,4 +151,5 @@
         </div>
 
     </div>
+    </Teleport>
 </template>

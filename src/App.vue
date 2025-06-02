@@ -9,7 +9,7 @@
 <template>
   <div class="w-screen h-screen flex flex-col">
 
-    <div class="grow flex">
+    <div class="grow flex overflow-hidden">
 
       <Sidebar/>
 

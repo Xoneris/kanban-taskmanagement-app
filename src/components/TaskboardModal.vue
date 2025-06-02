@@ -96,9 +96,10 @@
 </script>
 
 <template>
-    <div @click="closeTaskBoardModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50">
+    <Teleport to="body">
+    <div @click="closeTaskBoardModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50 overflow-hidden">
 
-        <div @click.stop class="dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8 mx-4">
+        <div @click.stop class="dark:bg-dark-grey bg-white w-full max-w-[480px] max-h-[90vh] flex flex-col gap-6 rounded-[6px] p-8 mx-4 overflow-y-auto">
 
             <h1 v-if="editBoard" class="heading-l text-black dark:text-white">Edit Board</h1>
             <h1 v-else class="heading-l text-black dark:text-white">Add New Board</h1>
@@ -158,4 +159,5 @@
         </div>
 
     </div>
+    </Teleport>
 </template>
