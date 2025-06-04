@@ -67,7 +67,7 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
         if (updatedTask.status === columnName) {
             allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks[editedTaskIndex] = updatedTask
         } else {
-            allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex)
+            allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex,1)
             allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks.push(updatedTask)
         }
         
