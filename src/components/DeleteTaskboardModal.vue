@@ -25,6 +25,7 @@
 </script>
 
 <template>
+    <Teleport to="body">
     <div @click="closeDeleteTaskBoardModal" class="fixed top-0 left-0 min-w-screen w-full min-h-screen h-screen flex justify-center items-center bg-black/50">
 
         <div @click.stop class="dark:bg-dark-grey bg-white w-full max-w-[480px] flex flex-col gap-6 rounded-[6px] p-8 mx-4">
@@ -44,4 +45,5 @@
         </div>
 
     </div>
+    </Teleport>
 </template>

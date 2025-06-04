@@ -51,7 +51,6 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
 
         // Insert API Route to add new Task
 
-        // currentBoardStore.board.columns[currentColumnIndex].tasks.push(task)
         allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.push(task)
 
     }
@@ -71,7 +70,6 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
             allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex)
             allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks.push(updatedTask)
         }
-        // allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(editedTaskIndex,1)
         
         
     }
@@ -114,8 +112,6 @@ export const useAllBoardsStore = defineStore('allBoards', () => {
 
         allBoards.value[currentBoardIndex].columns[currentColumnIndex].tasks.splice(currentTaskIndex,1)
         allBoards.value[currentBoardIndex].columns[targetColumnIndex].tasks.push(taskClone)
-
-        // currentBoardStore.board.columns[currentColumnIndex].tasks[currentTaskIndex].status = statusName
 
     }
 
